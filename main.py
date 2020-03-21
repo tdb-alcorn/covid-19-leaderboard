@@ -83,13 +83,15 @@ def page(title, data, best, worst):
         <body>
             <h1>{title}</h1>
 
-            <h4>Last updated: 2020/03/20 6:39pm -0700
+            <p>Which US counties are doing the best in the fight against COVID-19?</p>
 
-            <p>
+            <h4>Last updated: 2020/03/20 6:39pm -0700</h4>
+
+            <h4>
                 Do your part to slow the spread! Follow <a href='https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html'>CDC guidelines</a>.
-            </p>
+            </h4>
 
-            <h2>Best</h>
+            <h2>Best</h2>
             {best}
 
             <h2>Worst</h2>
@@ -105,6 +107,10 @@ def page(title, data, best, worst):
 
             <p>
                 Doubling period is calculated using the fitted exponential growth rate over the last three days.
+            </p>
+
+            <p>
+                If you want to help make this leaderboard better, head over to the <a href='https://github.com/tdb-alcorn/covid-19-leaderboard'>Github repository</a>.
             </p>
         </body>
     </html>
