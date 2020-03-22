@@ -27,10 +27,14 @@ with open(data_file, newline='') as f:
 
 # transforms
 def asDatum(data):
-    return map(lambda r: Datum(r[1], r[2], *r[-3:], 0, 0), data)
+    return map(lambda r: Datum(r[1], r[2], *r[-3:], 0, 0, 0), data)
 
 def fitLast3Days(data):
     return map(fitDatum, data)
+
+def with_rank(data):
+    return [data[i]._replace(rank=i+1) for i in range(len(data))]
+
 
 # filters
 def ampleCases(data):
@@ -50,6 +54,7 @@ pipeline = [
     fitLast3Days,
     hasGrowth,
     byFit,
+    with_rank,
 ]
 
 res = data
