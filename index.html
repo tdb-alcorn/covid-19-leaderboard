@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{title}</title>
+        <meta name="description" content="A COVID-19 leaderboard comparing the best and worst US counties">
+        <meta name="author" content="Tom Alcorn">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+        <style>
+            {stylesheet}
+        </style>
+    </head>
+  <meta charset="utf-8">
+    <body>
+        <div class="container">
+            <h1>{title}</h1>
+
+            <p>Which US counties are doing the best in the fight against COVID-19?</p>
+
+            <h6>Last updated: {last_updated}</h6>
+
+            <h6>
+                Do your part to slow the spread! Follow
+                <a href='https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html'>CDC guidelines</a>.
+            </h6>
+
+            <h2>Best</h2>
+            {best}
+
+            <h2>Worst</h2>
+            {worst}
+
+            <h2>All</h2>
+            <p>This table includes all counties reporting 10 or more confirmed cases.</p>
+            {data}
+
+            <p>
+                Source: USAFacts
+                <a href='https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/'>https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/</a>
+            </p>
+
+            <p>
+                Doubling period is calculated using the fitted exponential
+                growth rate over the last three days.
+            </p>
+
+            <p>
+                If you want to help make this leaderboard better, head over to
+                the
+                <a href='https://github.com/tdb-alcorn/covid-19-leaderboard'>Github repository</a>.
+            </p>
+        </div>
+    </body>
+</html>

@@ -1,3 +1,5 @@
+import os
+import datetime
 import csv
 
 from flask import Flask
@@ -9,9 +11,10 @@ from util import asInt
 app = Flask(__name__)
 
 
-dataFile = 'covid_confirmed_usafacts.csv'
+data_file = 'covid_confirmed_usafacts.csv'
+last_updated = datetime.datetime.fromtimestamp(os.path.getmtime(data_file))
 data = list()
-with open(dataFile, newline='') as f:
+with open(data_file, newline='') as f:
     r = csv.reader(f)
     first = True
     for row in r:
@@ -21,7 +24,6 @@ with open(dataFile, newline='') as f:
             tr = list(map(asInt, row))
             data.append(tr)
 
-# print(data)
 
 # transforms
 def asDatum(data):
@@ -54,9 +56,6 @@ res = data
 for stage in pipeline:
     res = stage(res)
 
-# print(list(byFit(fitLast3Days(asDatum(ampleCases(data))))))
-# print(list(res))
-# print(len(res))
 
 def table(data):
     t = '<table>'
@@ -74,48 +73,21 @@ def table(data):
 
     return t
 
-def page(title, data, best, worst):
-    return '''
-    <html>
-        <head>
-            <title>{title}</title>
-        </head>
-        <body>
-            <h1>{title}</h1>
+html = None
+with open('index.html') as f:
+    html = f.read()
 
-            <p>Which US counties are doing the best in the fight against COVID-19?</p>
+css = ''
+with open('Skeleton-2.0.4/css/normalize.css') as f:
+    css += f.read()
+with open('Skeleton-2.0.4/css/skeleton.css') as f:
+    css += f.read()
 
-            <h4>Last updated: 2020/03/20 6:39pm -0700</h4>
-
-            <h4>
-                Do your part to slow the spread! Follow <a href='https://www.cdc.gov/coronavirus/2019-ncov/prepare/prevention.html'>CDC guidelines</a>.
-            </h4>
-
-            <h2>Best</h2>
-            {best}
-
-            <h2>Worst</h2>
-            {worst}
-
-            <h2>All</h2>
-            <p>This table includes all counties reporting 10 or more confirmed cases.</p>
-            {data}
-
-            <p>
-                Source: USAFacts <a href='https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/'>https://usafacts.org/visualizations/coronavirus-covid-19-spread-map/</a>
-            </p>
-
-            <p>
-                Doubling period is calculated using the fitted exponential growth rate over the last three days.
-            </p>
-
-            <p>
-                If you want to help make this leaderboard better, head over to the <a href='https://github.com/tdb-alcorn/covid-19-leaderboard'>Github repository</a>.
-            </p>
-        </body>
-    </html>
-    '''.format(title=title, data=data, best=best, worst=worst)
+def page(html, css, title, data, best, worst, last_updated):
+    return html.format(stylesheet=css, title=title, data=data, best=best, worst=worst,
+               last_updated=last_updated)
 
 @app.route('/')
 def main():
-    return page("COVID-19 Leaderboard", table(res), table(res[:10]), table(reversed(res[-10:])))
+    return page(html, css, "COVID-19 Leaderboard", table(res), table(res[:10]),
+                table(reversed(res[-10:])), last_updated.ctime())
