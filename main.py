@@ -11,23 +11,30 @@ from util import asInt
 app = Flask(__name__)
 
 
-data_file = 'covid_confirmed_usafacts.csv'
-last_updated = datetime.datetime.fromtimestamp(os.path.getmtime(data_file))
-data = list()
-with open(data_file, newline='') as f:
-    r = csv.reader(f)
-    first = True
-    for row in r:
-        if first:
-            first = False
-        else:
-            tr = list(map(asInt, row))
-            data.append(tr)
+# data_file_cases = 'covid_confirmed_usafacts.csv'
+data_file_deaths = 'covid_deaths_usafacts.csv'
+last_updated = datetime.datetime.fromtimestamp(os.path.getmtime(data_file_deaths))
 
+def read_data_file(data_file: str):
+    data = list()
+    with open(data_file, newline='', encoding='utf-8-sig') as f:
+        r = csv.reader(f)
+        first = True
+        for row in r:
+            if first:
+                first = False
+            else:
+                tr = list(map(asInt, row))
+                data.append(tr)
+    return data
+
+# data_cases = read_data_file(data_file_cases)
+data_deaths = read_data_file(data_file_deaths)
+data = data_deaths
 
 # transforms
 def asDatum(data):
-    return map(lambda r: Datum(r[1], r[2], *r[-3:], 0, 0, 0), data)
+    return map(lambda r: Datum(r[1], r[2], r[4:], r[-1], sum(r[4:]), 0, 0, 0), data)
 
 def fitLast3Days(data):
     return map(fitDatum, data)
@@ -37,8 +44,8 @@ def with_rank(data):
 
 
 # filters
-def ampleCases(data):
-    return filter(lambda d: d.yesterday > 10, data)
+def hasDeaths(data):
+    return filter(lambda d: d.sum > 1, data)
 
 def hasGrowth(data):
     return filter(lambda d: d.fit > 0, data)
@@ -50,9 +57,9 @@ def byFit(data):
 
 pipeline = [
     asDatum,
-    ampleCases,
+    hasDeaths,
     fitLast3Days,
-    hasGrowth,
+    # hasGrowth,
     byFit,
     with_rank,
 ]
