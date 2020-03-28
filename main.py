@@ -54,15 +54,15 @@ def has_growth(data):
 
 # sorts
 
-def by_fit(data):
-    return sorted(data, key=lambda d: d.fit.value)
+def by_doubling_period(data):
+    return sorted(data, key=lambda d: d.doubling_period.high, reverse=True)
 
 pipeline = [
     as_datum,
     has_deaths,
     fit_last_3_days,
     # has_growth,
-    by_fit,
+    by_doubling_period,
     with_rank,
 ]
 
