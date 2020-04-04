@@ -1,5 +1,14 @@
 # COVID-19 Leaderboard
 
+## Build
+
+
+1. Make a python3 virtual env in the project directory `python3 -m venv env`
+2. Activate it `. ./env/bin/activate`
+3. `pip install -r requirements.txt`
+4. Install the [Heroku command line tools](https://devcenter.heroku.com/articles/heroku-cli) (Linux: `curl https://cli-assets.heroku.com/install.sh | sh`)
+5. Run `heroku local`
+6. Navigate your browser to `localhost:5000`
 
 ## Ideas
 
